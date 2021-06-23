@@ -1,9 +1,24 @@
-version: 2
+version: 2.1
+executors:
+  my-executor:
+    docker:
+      - image: cimg/ruby:2.7.1-node
+    environment:
+      BUNDLE_PATH: vendor/bundle
+
+commands:
+  sayhello:
+    description: "Say Hello"
+    parameters:
+      to:
+        type: string
+        default: "World"
+    steps:
+      - run: echo Hello << parameters.to >>
+
 jobs:
   build:
-    docker:
-      - image: cimg/node:lts
+    executor: my-executor
     steps:
-      - checkout
-      - run: yarn install
-      - run: yarn test
+      - sayhello:
+        to: Everyone
